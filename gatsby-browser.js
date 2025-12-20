@@ -6,5 +6,14 @@ import "./src/normalize.css"
 // custom CSS styles
 import "./src/style.css"
 
-// Highlighting for code blocks
-import "prismjs/themes/prism.css"
+// KaTeX styles
+
+import "katex/dist/katex.min.css"
+
+
+
+// PrismJS styles
+
+import "prismjs/themes/prism-tomorrow.css"
+
+import "prismjs/plugins/line-numbers/prism-line-numbers.css"

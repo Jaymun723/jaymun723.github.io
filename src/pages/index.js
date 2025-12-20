@@ -1,5 +1,8 @@
 import * as React from "react"
 import { Link, graphql } from "gatsby"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
+import kebabCase from "lodash/kebabCase"
+import { FaTag } from "react-icons/fa"
 
 import Bio from "../components/bio"
 import Layout from "../components/layout"
@@ -24,15 +27,28 @@ const BlogIndex = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Bio />
-      <ol style={{ listStyle: `none` }}>
+      <ol className="bento-grid" style={{ listStyle: `none`, padding: 0 }}>
+        <li>
+          <article className="post-list-item bento-card" itemScope itemType="http://schema.org/Person">
+            <header>
+              <h2 style={{ marginTop: 0 }}>
+                <Link to="/about">About Me</Link>
+              </h2>
+            </header>
+            <section>
+              <Bio />
+            </section>
+          </article>
+        </li>
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug
+          const featuredImage = getImage(post.frontmatter.featuredImage)
+          const tags = post.frontmatter.tags
 
           return (
             <li key={post.fields.slug}>
               <article
-                className="post-list-item"
+                className="post-list-item bento-card"
                 itemScope
                 itemType="http://schema.org/Article"
               >
@@ -43,6 +59,27 @@ const BlogIndex = ({ data, location }) => {
                     </Link>
                   </h2>
                   <small>{post.frontmatter.date}</small>
+                  {tags && tags.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+                      {tags.map(tag => (
+                        <Link
+                          key={tag}
+                          to={`/tags/${kebabCase(tag)}/`}
+                          style={{
+                            fontSize: '0.8rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.2rem',
+                            color: 'var(--color-text-light)',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          <FaTag size={10} />
+                          {tag}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </header>
                 <section>
                   <p
@@ -52,6 +89,11 @@ const BlogIndex = ({ data, location }) => {
                     itemProp="description"
                   />
                 </section>
+                {featuredImage && (
+                  <div style={{ marginTop: 'var(--spacing-4)' }}>
+                    <GatsbyImage image={featuredImage} alt={title} style={{ borderRadius: '8px' }} />
+                  </div>
+                )}
               </article>
             </li>
           )
@@ -87,8 +129,15 @@ export const pageQuery = graphql`
           date(formatString: "MMMM DD, YYYY")
           title
           description
+          tags
+          featuredImage {
+            childImageSharp {
+              gatsbyImageData(width: 600)
+            }
+          }
         }
       }
     }
   }
 `
+
