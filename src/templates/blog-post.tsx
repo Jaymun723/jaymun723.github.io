@@ -244,13 +244,14 @@ const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
 }
 
 
-export const Head: React.FC<PageProps<BlogPostBySlugData>> = ({ data: { markdownRemark: post } }) => {
+export const Head: React.FC<PageProps<BlogPostBySlugData>> = ({ data: { markdownRemark: post }, location }) => {
   return (
     <Seo
       title={post.frontmatter.title}
       description={post.frontmatter.description || post.excerpt}
       image={post.frontmatter.featuredImage?.publicURL}
       keywords={post.frontmatter.tags}
+      pathname={location.pathname}
     />
   )
 }

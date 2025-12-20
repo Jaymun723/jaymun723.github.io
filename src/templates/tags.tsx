@@ -40,7 +40,6 @@ const Tags: React.FC<PageProps<TagsQueryData, TagsPageContext>> = ({ pageContext
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Seo title={`Tags - ${tag}`} />
       <div className="global-wrapper">
         <h1 className="main-heading">{tagHeader}</h1>
         <ul style={{ listStyle: `none`, padding: 0 }}>
@@ -66,6 +65,10 @@ const Tags: React.FC<PageProps<TagsQueryData, TagsPageContext>> = ({ pageContext
 }
 
 export default Tags
+
+export const Head: React.FC<PageProps<TagsQueryData, TagsPageContext>> = ({ pageContext, location }) => (
+  <Seo title={`Tags - ${pageContext.tag}`} pathname={location.pathname} />
+)
 
 export const pageQuery = graphql`
   query($tag: String) {

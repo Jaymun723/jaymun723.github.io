@@ -44,12 +44,13 @@ const AboutPageTemplate: React.FC<PageProps<AboutPageData>> = ({ data, location 
   )
 }
 
-export const Head: React.FC<PageProps<AboutPageData>> = ({ data }) => {
+export const Head: React.FC<PageProps<AboutPageData>> = ({ data, location }) => {
   const post = data.markdownRemark
   return (
     <Seo
       title={post.frontmatter.title}
       description={post.frontmatter.description || post.excerpt}
+      pathname={location.pathname}
     />
   )
 }

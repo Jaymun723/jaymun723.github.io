@@ -29,7 +29,6 @@ const TagsPage: React.FC<PageProps<TagsPageData>> = ({
 }) => {
   return (
     <Layout location={location} title={title}>
-      <Seo title="All Tags" />
       <div className="global-wrapper">
         <h1 className="main-heading">Tags</h1>
         <ul style={{ listStyle: `none`, padding: 0, display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
@@ -47,6 +46,10 @@ const TagsPage: React.FC<PageProps<TagsPageData>> = ({
 }
 
 export default TagsPage
+
+export const Head: React.FC<PageProps> = ({ location }) => (
+  <Seo title="All Tags" pathname={location.pathname} />
+)
 
 export const pageQuery = graphql`
   query {

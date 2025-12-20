@@ -14,6 +14,7 @@ interface SeoProps {
   children?: React.ReactNode
   image?: string
   keywords?: string[]
+  pathname?: string
 }
 
 interface SeoQueryData {
@@ -22,11 +23,14 @@ interface SeoQueryData {
       title: string
       description: string
       siteUrl: string
+      social: {
+        github: string
+      }
     }
   }
 }
 
-const Seo: React.FC<SeoProps> = ({ description, title, children, image, keywords }) => {
+const Seo: React.FC<SeoProps> = ({ description, title, children, image, keywords, pathname }) => {
   const { site } = useStaticQuery<SeoQueryData>(
     graphql`
       query {
@@ -35,6 +39,9 @@ const Seo: React.FC<SeoProps> = ({ description, title, children, image, keywords
             title
             description
             siteUrl
+            social {
+              github
+            }
           }
         }
       }
@@ -42,22 +49,37 @@ const Seo: React.FC<SeoProps> = ({ description, title, children, image, keywords
   )
 
   const metaDescription = description || site.siteMetadata.description
+  const siteUrl = site.siteMetadata.siteUrl.replace(/\/$/, "")
+  const canonical = pathname ? `${siteUrl}${pathname}` : siteUrl
   const defaultTitle = site.siteMetadata?.title
-  const defaultImage = site.siteMetadata?.siteUrl + "/icons/icon-512x512.png" // Fallback (from manifest)
-  const metaImage = image ? `${site.siteMetadata.siteUrl}${image}` : defaultImage
+  const defaultImage = `${siteUrl}/icons/icon-512x512.png`
+  const metaImage = image ? `${siteUrl}${image}` : defaultImage
 
   return (
     <>
       <title>{defaultTitle ? `${title} | ${defaultTitle}` : title}</title>
       <meta name="description" content={metaDescription} />
+      <link rel="canonical" href={canonical} />
+
+      {/* Open Graph / Facebook */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={canonical} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={metaDescription} />
-      <meta property="og:type" content="website" />
       <meta property="og:image" content={metaImage} />
+      <meta property="og:image:alt" content={description || title} />
+      <meta property="og:site_name" content={defaultTitle} />
+
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={canonical} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={metaDescription} />
       <meta name="twitter:image" content={metaImage} />
+      {site.siteMetadata.social?.github && (
+        <meta name="twitter:creator" content={site.siteMetadata.social.github} />
+      )}
+
       {keywords && keywords.length > 0 && (
         <meta name="keywords" content={keywords.join(`, `)} />
       )}

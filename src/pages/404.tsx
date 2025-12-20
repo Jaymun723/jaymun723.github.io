@@ -23,7 +23,7 @@ const NotFoundPage: React.FC<PageProps<NotFoundPageData>> = ({ data, location })
   )
 }
 
-export const Head: React.FC = () => <Seo title="404: Not Found" />
+export const Head: React.FC<PageProps> = ({ location }) => <Seo title="404: Not Found" pathname={location.pathname} />
 
 export default NotFoundPage
 
