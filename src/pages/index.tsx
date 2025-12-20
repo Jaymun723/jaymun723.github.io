@@ -137,7 +137,7 @@ export default BlogIndex
  *
  * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
  */
-export const Head: React.FC = () => <Seo title="All posts" />
+export const Head: React.FC = () => <Seo title="Computational physics - Victor Caro's Blog" />
 
 export const pageQuery = graphql`
   {

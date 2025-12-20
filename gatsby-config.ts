@@ -7,8 +7,8 @@ const config: GatsbyConfig = {
       name: `Victor Caro`,
       summary: `Hi! I'm Victor Caro, a quantum physics and computer science student. Welcome to my blog!`,
     },
-    description: `Understanding quantum physics through simulations.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
+    description: `"Understanding quantum physics through simulations" <- This is what I want to, welcome to my blog !`,
+    siteUrl: `https://jaymun723.github.io/`,
     social: {
       github: `jaymun723`,
       linkedin: `victor--caro`,

@@ -22,9 +22,6 @@ interface SeoQueryData {
       title: string
       description: string
       siteUrl: string
-      social: {
-        twitter: string
-      }
     }
   }
 }
@@ -38,9 +35,6 @@ const Seo: React.FC<SeoProps> = ({ description, title, children, image, keywords
             title
             description
             siteUrl
-            social {
-              twitter
-            }
           }
         }
       }
@@ -61,16 +55,13 @@ const Seo: React.FC<SeoProps> = ({ description, title, children, image, keywords
       <meta property="og:type" content="website" />
       <meta property="og:image" content={metaImage} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta
-        name="twitter:creator"
-        content={site.siteMetadata?.social?.twitter || ``}
-      />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={metaDescription} />
       <meta name="twitter:image" content={metaImage} />
       {keywords && keywords.length > 0 && (
         <meta name="keywords" content={keywords.join(`, `)} />
       )}
+      <meta name="google-site-verification" content="npsUDOkYbYTRzJJ51azKuXWgFiOC_5jLSibjtdo5COk" />
       {children}
     </>
   )
