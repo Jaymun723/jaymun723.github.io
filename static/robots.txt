@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://jaymun723.github.io/sitemap-index.xml
