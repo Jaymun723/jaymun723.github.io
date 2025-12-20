@@ -6,11 +6,26 @@
  */
 
 import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 import { FaGithub, FaLinkedin } from "react-icons/fa"
 
-const Bio = () => {
-  const data = useStaticQuery(graphql`
+interface BioQueryData {
+  site: {
+    siteMetadata: {
+      author: {
+        name: string
+        summary: string
+      }
+      social: {
+        github: string
+        linkedin: string
+      }
+    }
+  }
+}
+
+const Bio: React.FC = () => {
+  const data = useStaticQuery<BioQueryData>(graphql`
     query BioQuery {
       site {
         siteMetadata {
@@ -36,7 +51,8 @@ const Bio = () => {
       {author?.name && (
         <div>
           <p style={{ marginBottom: '1rem' }}>
-            Written by <strong>{author.name}</strong> {author?.summary || null}
+            {author?.summary || null}<br />
+            <Link to="/about">Learn more...</Link>
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', fontSize: '1.5rem' }}>
             {social?.github && (

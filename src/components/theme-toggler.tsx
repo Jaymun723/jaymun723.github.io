@@ -1,11 +1,13 @@
 import React from 'react'
 import { FaSun, FaMoon } from 'react-icons/fa'
 
-const ThemeToggler = () => {
-  const [theme, setTheme] = React.useState(null)
+type Theme = 'dark' | 'light'
+
+const ThemeToggler: React.FC = () => {
+  const [theme, setTheme] = React.useState<Theme | null>(null)
 
   React.useEffect(() => {
-    const savedTheme = window.localStorage.getItem('theme')
+    const savedTheme = window.localStorage.getItem('theme') as Theme | null
     if (savedTheme) {
       setTheme(savedTheme)
     } else {

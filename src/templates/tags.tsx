@@ -1,9 +1,35 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, PageProps } from "gatsby"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const Tags = ({ pageContext, data, location }) => {
+interface TagsPageContext {
+  tag: string
+}
+
+interface TagsQueryData {
+  site: {
+    siteMetadata: {
+      title: string
+    }
+  }
+  allMarkdownRemark: {
+    totalCount: number
+    edges: {
+      node: {
+        fields: {
+          slug: string
+        }
+        frontmatter: {
+          title: string
+          date: string
+        }
+      }
+    }[]
+  }
+}
+
+const Tags: React.FC<PageProps<TagsQueryData, TagsPageContext>> = ({ pageContext, data, location }) => {
   const { tag } = pageContext
   const { edges, totalCount } = data.allMarkdownRemark
   const siteTitle = data.site.siteMetadata?.title || `Title`

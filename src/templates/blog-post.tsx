@@ -1,7 +1,7 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
-import { FaArrowLeft, FaArrowRight, FaTag, FaShareAlt, FaCheck, FaLink } from "react-icons/fa"
-import { GatsbyImage, getImage } from "gatsby-plugin-image"
+import { Link, graphql, PageProps } from "gatsby"
+import { FaArrowLeft, FaArrowRight, FaTag, FaShareAlt, FaCheck } from "react-icons/fa"
+import { GatsbyImage, getImage, IGatsbyImageData } from "gatsby-plugin-image"
 import kebabCase from "lodash/kebabCase"
 import Comments from "../components/comments"
 
@@ -9,7 +9,12 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const ShareButton = ({ title, url }) => {
+interface ShareButtonProps {
+  title: string
+  url: string
+}
+
+const ShareButton: React.FC<ShareButtonProps> = ({ title, url }) => {
   const [copied, setCopied] = React.useState(false)
 
   const handleShare = async () => {
@@ -19,13 +24,13 @@ const ShareButton = ({ title, url }) => {
       url: url,
     }
 
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share(shareData)
       } catch (err) {
         console.error("Error sharing:", err)
       }
-    } else {
+    } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(url).then(() => {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
@@ -58,16 +63,60 @@ const ShareButton = ({ title, url }) => {
   )
 }
 
-const BlogPostTemplate = ({
+interface BlogPostBySlugData {
+  site: {
+    siteMetadata: {
+      title: string
+    }
+  }
+  markdownRemark: {
+    id: string
+    excerpt: string
+    html: string
+    tableOfContents: string
+    fields: {
+      slug: string
+    }
+    frontmatter: {
+      title: string
+      date: string
+      description: string
+      tags: string[]
+      featuredImage: {
+        childImageSharp: {
+          gatsbyImageData: IGatsbyImageData
+        }
+        publicURL: string
+      }
+    }
+  }
+  previous: {
+    fields: {
+      slug: string
+    }
+    frontmatter: {
+      title: string
+    }
+  } | null
+  next: {
+    fields: {
+      slug: string
+    }
+    frontmatter: {
+      title: string
+    }
+  } | null
+}
+
+const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
   data: { previous, next, site, markdownRemark: post },
   location,
 }) => {
   const siteTitle = site.siteMetadata?.title || `Title`
-  const featuredImage = getImage(post.frontmatter.featuredImage)
+  const featuredImage = post.frontmatter.featuredImage ? getImage(post.frontmatter.featuredImage.childImageSharp.gatsbyImageData) : null
   const tags = post.frontmatter.tags
   const postUrl = typeof window !== 'undefined' ? window.location.href : ''
-  const cusdisAppId = '2406709e-c463-4b14-9d0f-c31e598ec5b2' // TODO: Replace with your actual App ID from https://cusdis.com/
-
+  const cusdisAppId = '2406709e-c463-4b14-9d0f-c31e598ec5b2'
   return (
     <Layout location={location} title={siteTitle}>
       <div className="blog-post-grid">
@@ -82,7 +131,7 @@ const BlogPostTemplate = ({
                 {post.frontmatter.title}
               </h1>
               <div style={{ marginTop: '0.2rem' }}>
-                 <ShareButton title={post.frontmatter.title} url={postUrl} />
+                <ShareButton title={post.frontmatter.title} url={postUrl} />
               </div>
             </div>
             <p>{post.frontmatter.date}</p>
@@ -122,20 +171,20 @@ const BlogPostTemplate = ({
           />
           <hr />
         </article>
-        
+
         <aside className="blog-post-sidebar">
           {post.tableOfContents && (
             <div className="toc-card bento-card" style={{ marginBottom: 'var(--spacing-6)' }}>
               <h2 style={{ marginTop: 0, fontSize: '1.2rem', marginBottom: 'var(--spacing-4)' }}>Table of Contents</h2>
-              <div 
-                dangerouslySetInnerHTML={{ __html: post.tableOfContents }} 
+              <div
+                dangerouslySetInnerHTML={{ __html: post.tableOfContents }}
                 className="toc-content"
               />
             </div>
           )}
           <div className="bento-card">
             <h2 style={{ marginTop: 0 }}>
-              <Link to="/about">About Me</Link>
+              <Link to="/about">About me</Link>
             </h2>
             <Bio />
           </div>
@@ -185,7 +234,7 @@ const BlogPostTemplate = ({
 }
 
 
-export const Head = ({ data: { markdownRemark: post } }) => {
+export const Head: React.FC<PageProps<BlogPostBySlugData>> = ({ data: { markdownRemark: post } }) => {
   return (
     <Seo
       title={post.frontmatter.title}
@@ -248,4 +297,3 @@ export const pageQuery = graphql`
     }
   }
 `
-

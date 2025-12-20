@@ -4,11 +4,38 @@ import { FaGithub, FaLinkedin } from "react-icons/fa"
 import ThemeToggler from "./theme-toggler"
 import CodeBlockManager from "./code-copy-button"
 
-const Layout = ({ location, title, children }) => {
-  const data = useStaticQuery(graphql`
+declare const __PATH_PREFIX__: string;
+
+interface LayoutProps {
+  location: {
+    pathname: string
+  }
+  title: string
+  children: React.ReactNode
+}
+
+interface LayoutQueryData {
+  site: {
+    siteMetadata: {
+      author: {
+        name: string
+      }
+      social: {
+        github: string
+        linkedin: string
+      }
+    }
+  }
+}
+
+const Layout: React.FC<LayoutProps> = ({ location, title, children }) => {
+  const data = useStaticQuery<LayoutQueryData>(graphql`
     query LayoutQuery {
       site {
         siteMetadata {
+          author {
+            name
+          }
           social {
             github
             linkedin
@@ -19,9 +46,10 @@ const Layout = ({ location, title, children }) => {
   `)
 
   const social = data.site.siteMetadata?.social
+  const name = data.site.siteMetadata.author.name
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
-  
+
   const header = (
     <h1 className="main-heading">
       <Link to="/">{title}</Link>
@@ -42,7 +70,7 @@ const Layout = ({ location, title, children }) => {
       <main>{children}</main>
       <footer className="bento-card" style={{ marginTop: 'var(--spacing-16)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          © {new Date().getFullYear()} {title}
+          © {new Date().getFullYear()} {title} - {name}
         </div>
         <div style={{ display: 'flex', gap: '1rem', fontSize: '1.2rem' }}>
           {social?.github && (

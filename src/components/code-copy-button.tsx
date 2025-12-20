@@ -2,7 +2,11 @@ import React, { useEffect } from 'react'
 import { FaCopy, FaCheck } from 'react-icons/fa'
 import { createRoot } from 'react-dom/client'
 
-const CopyButton = ({ content }) => {
+interface CopyButtonProps {
+  content: string
+}
+
+const CopyButton: React.FC<CopyButtonProps> = ({ content }) => {
   const [copied, setCopied] = React.useState(false)
 
   const handleCopy = () => {
@@ -40,7 +44,7 @@ const CopyButton = ({ content }) => {
   )
 }
 
-const CodeBlockManager = () => {
+const CodeBlockManager: React.FC = () => {
   useEffect(() => {
     const addButtons = () => {
       // Target PrismJS pre tags
@@ -66,7 +70,7 @@ const CodeBlockManager = () => {
         // Get content - for PrismJS we might want to exclude line numbers if they are in the DOM
         // But usually pre.innerText works well enough or we can target the code tag
         const codeElement = pre.querySelector('code')
-        const content = codeElement ? codeElement.innerText : pre.innerText
+        const content = codeElement ? (codeElement as HTMLElement).innerText : (pre as HTMLElement).innerText
         
         if (content) {
           const root = createRoot(buttonContainer)

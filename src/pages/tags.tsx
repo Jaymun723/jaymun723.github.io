@@ -1,10 +1,24 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, PageProps } from "gatsby"
 import kebabCase from "lodash/kebabCase"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const TagsPage = ({
+interface TagsPageData {
+  site: {
+    siteMetadata: {
+      title: string
+    }
+  }
+  allMarkdownRemark: {
+    group: {
+      fieldValue: string
+      totalCount: number
+    }[]
+  }
+}
+
+const TagsPage: React.FC<PageProps<TagsPageData>> = ({
   data: {
     allMarkdownRemark: { group },
     site: {

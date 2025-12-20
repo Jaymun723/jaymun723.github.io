@@ -1,24 +1,17 @@
-/**
- * Configure your Gatsby site with this file.
- *
- * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/
- */
+import type { GatsbyConfig } from "gatsby"
 
-/**
- * @type {import('gatsby').GatsbyConfig}
- */
-module.exports = {
+const config: GatsbyConfig = {
   siteMetadata: {
     title: `Computational Physics`,
     author: {
-      name: `Caro`,
-      summary: `who loves simulating the universe with code.`,
+      name: `Victor Caro`,
+      summary: `Hi! I'm Victor Caro, a quantum physics and computer science student. Welcome to my blog!`,
     },
-    description: `Simulating the universe, one line of code at a time.`,
+    description: `Understanding quantum physics through simulations.`,
     siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
     social: {
-      github: `your-username`,
-      linkedin: `your-profile`,
+      github: `jaymun723`,
+      linkedin: `victor--caro`,
     },
   },
   plugins: [
@@ -118,8 +111,8 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.nodes.map(node => {
+            serialize: ({ query: { site, allMarkdownRemark } }: any) => {
+              return allMarkdownRemark.nodes.map((node: any) => {
                 return Object.assign({}, node.frontmatter, {
                   description: node.excerpt,
                   date: node.frontmatter.date,
@@ -145,7 +138,7 @@ module.exports = {
               }
             }`,
             output: "/rss.xml",
-            title: "Gatsby Starter Blog RSS Feed",
+            title: "Computational Physics Blog RSS Feed",
           },
         ],
       },
@@ -153,16 +146,18 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Gatsby Starter Blog`,
-        short_name: `Gatsby`,
+        name: `Computational Physics Blog`,
+        short_name: `Computational Physics`,
         start_url: `/`,
         background_color: `#ffffff`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
         // theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/icon.png`, // This path is relative to the root of the site.
       },
     },
   ],
 }
+
+export default config
