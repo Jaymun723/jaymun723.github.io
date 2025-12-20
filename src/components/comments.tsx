@@ -65,8 +65,6 @@ const CommentForm: React.FC<CommentFormProps> = ({
       email: email,
     }
 
-    console.log("Posting comment with payload:", payload)
-
     try {
       const res = await fetch(`${CUSDIS_API_HOST}/api/open/comments`, {
         method: "POST",
@@ -327,7 +325,6 @@ const Comments: React.FC<CommentsProps> = ({ appId, pageId }) => {
 
   const fetchComments = useCallback(async () => {
     try {
-      console.log("Fetching comments for page:", pageId)
       const res = await fetch(
         `${CUSDIS_API_HOST}/api/open/comments?appId=${encodeURIComponent(
           appId
@@ -340,7 +337,6 @@ const Comments: React.FC<CommentsProps> = ({ appId, pageId }) => {
       }
 
       const json = await res.json()
-      console.log("Cusdis API Response:", json)
 
       // Navigate to the array of comments
       // Based on provided JSON: json.data.data is the array
@@ -352,8 +348,6 @@ const Comments: React.FC<CommentsProps> = ({ appId, pageId }) => {
       } else if (json.data && json.data.data && Array.isArray(json.data.data)) {
         rawComments = json.data.data
       }
-
-      console.log("Extracted Comments List:", rawComments)
 
       if (rawComments.length === 0) {
         setComments([])
@@ -380,8 +374,6 @@ const Comments: React.FC<CommentsProps> = ({ appId, pageId }) => {
       }
 
       const roots = rawComments.map(processComment)
-
-      console.log("Final Tree Roots:", roots)
 
       // Sort root comments by date descending (newest first)
       roots.sort((a, b) => {

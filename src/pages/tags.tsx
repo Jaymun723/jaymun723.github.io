@@ -55,7 +55,10 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(limit: 2000) {
+    allMarkdownRemark(
+      limit: 2000
+      filter: { fields: { collection: { eq: "blog" } } }
+    ) {
       group(field: { frontmatter: { tags: SELECT } }) {
         fieldValue
         totalCount

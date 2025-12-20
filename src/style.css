@@ -159,7 +159,10 @@ body.light .bento-card {
   }
 
   .toc-card {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--spacing-12));
+    min-height: auto;
   }
 }
 
@@ -175,6 +178,22 @@ hr {
 }
 
 /* Table of Contents */
+.toc-content {
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) transparent;
+}
+
+.toc-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc-content::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent);
+  border-radius: 4px;
+}
+
 .toc-content ul {
   list-style: none;
   margin: 0;
@@ -309,7 +328,7 @@ ol {
   margin-right: var(--spacing-0);
   padding: var(--spacing-0);
   margin-bottom: var(--spacing-8);
-  list-style-position: outside;
+  list-style-position: inside;
   list-style-image: none;
 }
 
@@ -521,9 +540,5 @@ body.light .line-numbers-rows {
   blockquote {
     padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-4);
     margin-left: var(--spacing-0);
-  }
-  ul,
-  ol {
-    list-style-position: inside;
   }
 }

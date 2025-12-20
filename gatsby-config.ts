@@ -26,6 +26,13 @@ const config: GatsbyConfig = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
+        path: `${__dirname}/content/about`,
+        name: `about`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
         name: `images`,
         path: `${__dirname}/src/images`,
       },
@@ -89,6 +96,7 @@ const config: GatsbyConfig = {
               escapeEntities: {},
             },
           },
+          `gatsby-remark-copy-linked-files`,
         ],
       },
     },
@@ -123,7 +131,10 @@ const config: GatsbyConfig = {
               })
             },
             query: `{
-              allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
+              allMarkdownRemark(
+                sort: {frontmatter: {date: DESC}}
+                filter: {fields: {collection: {eq: "blog"}}}
+              ) {
                 nodes {
                   excerpt
                   html

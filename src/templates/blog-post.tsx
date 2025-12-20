@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Link, graphql, PageProps } from "gatsby"
 import { FaArrowLeft, FaArrowRight, FaTag, FaShareAlt, FaCheck } from "react-icons/fa"
-import { GatsbyImage, getImage, IGatsbyImageData } from "gatsby-plugin-image"
+import { IGatsbyImageData } from "gatsby-plugin-image"
 import kebabCase from "lodash/kebabCase"
 import Comments from "../components/comments"
 
@@ -113,10 +113,12 @@ const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
   location,
 }) => {
   const siteTitle = site.siteMetadata?.title || `Title`
-  const featuredImage = post.frontmatter.featuredImage ? getImage(post.frontmatter.featuredImage.childImageSharp.gatsbyImageData) : null
   const tags = post.frontmatter.tags
   const postUrl = typeof window !== 'undefined' ? window.location.href : ''
   const cusdisAppId = '2406709e-c463-4b14-9d0f-c31e598ec5b2'
+
+  const prettySlug = post.fields.slug.replace("/", "")
+
   return (
     <Layout location={location} title={siteTitle}>
       <div className="blog-post-grid">
@@ -127,7 +129,7 @@ const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
         >
           <header>
             <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', gap: '1rem' }}>
-              <h1 itemProp="headline" style={{ marginTop: 'var(--spacing-0)', marginBottom: 'var(--spacing-4)' }}>
+              <h1 id={prettySlug} itemProp="headline" style={{ marginTop: 'var(--spacing-0)', marginBottom: 'var(--spacing-4)' }}>
                 {post.frontmatter.title}
               </h1>
               <div style={{ marginTop: '0.2rem' }}>
@@ -160,11 +162,11 @@ const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
               </div>
             )}
           </header>
-          {featuredImage && (
+          {/* {featuredImage && (
             <div style={{ marginBottom: 'var(--spacing-8)' }}>
               <GatsbyImage image={featuredImage} alt={post.frontmatter.title} style={{ borderRadius: '8px' }} />
             </div>
-          )}
+          )} */}
           <section
             dangerouslySetInnerHTML={{ __html: post.html }}
             itemProp="articleBody"
@@ -175,11 +177,19 @@ const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
         <aside className="blog-post-sidebar">
           {post.tableOfContents && (
             <div className="toc-card bento-card" style={{ marginBottom: 'var(--spacing-6)' }}>
-              <h2 style={{ marginTop: 0, fontSize: '1.2rem', marginBottom: 'var(--spacing-4)' }}>Table of Contents</h2>
-              <div
-                dangerouslySetInnerHTML={{ __html: post.tableOfContents }}
-                className="toc-content"
-              />
+              <h2 style={{ marginTop: 0, fontSize: '1.2rem', marginBottom: 'var(--spacing-4)', flexShrink: 0 }}>Table of Contents</h2>
+              <div className="toc-content">
+                <ul>
+                  <li>
+                    <a href={`#${prettySlug}`}>
+                      {post.frontmatter.title}
+                    </a>
+                  </li>
+                </ul>
+                <div
+                  dangerouslySetInnerHTML={{ __html: post.tableOfContents }}
+                />
+              </div>
             </div>
           )}
           <div className="bento-card">
