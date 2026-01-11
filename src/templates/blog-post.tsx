@@ -119,6 +119,31 @@ const BlogPostTemplate: React.FC<PageProps<BlogPostBySlugData>> = ({
 
   const prettySlug = post.fields.slug.replace("/", "")
 
+  React.useEffect(() => {
+    const demoLoader = document.getElementById('demo-loader')
+    if (demoLoader) {
+      const url = demoLoader.getAttribute('data-url')
+      if (url) {
+        const button = document.createElement('button')
+        button.innerText = "Load Demo"
+        button.style.padding = "10px 20px"
+        button.style.fontSize = "16px"
+        button.style.cursor = "pointer"
+        button.style.backgroundColor = "var(--color-primary)"
+        button.style.color = "white"
+        button.style.border = "none"
+        button.style.borderRadius = "5px"
+
+        button.onclick = () => {
+             demoLoader.innerHTML = `<iframe src="${url}" title="Voxel Engine Demo" width="100%" height="600px" style="border:0"></iframe>`
+        }
+
+        demoLoader.innerHTML = ''
+        demoLoader.appendChild(button)
+      }
+    }
+  }, [post.html])
+
   return (
     <Layout location={location} title={siteTitle}>
       <div className="blog-post-grid">
